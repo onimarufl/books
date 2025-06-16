@@ -4,7 +4,6 @@ import com.manage.books.entity.Books;
 import com.manage.books.models.BooksRequest;
 import com.manage.books.repository.BooksRepository;
 import com.manage.books.utils.Constants;
-import com.manage.books.validate.PublishedYearValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
