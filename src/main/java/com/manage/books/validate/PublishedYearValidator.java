@@ -1,6 +1,7 @@
 package com.manage.books.validate;
 
 import com.manage.books.utils.Constants;
+import com.manage.books.utils.DateConvert;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,46 +12,24 @@ import java.util.Map;
 
 @Service
 public class PublishedYearValidator {
-    public ResponseEntity<Map<String, String>> validatePublishedYear(LocalDate publishedDate, String calendarType) {
+
+    private final DateConvert dateConvert;
+
+    public PublishedYearValidator(DateConvert dateConvert) {
+        this.dateConvert = dateConvert;
+    }
+
+
+    public ResponseEntity<Map<String, String>> validatePublishedYear(LocalDate publishedDate) {
         Map<String, String> error = new HashMap<>();
-        LocalDate publishedDateConvertToGregorian;
-        if (calendarType.equals(Constants.BUDDHIST_CALENDAR_TYPE)) {
-            publishedDateConvertToGregorian = publishedDate.minusYears(Constants.BUDDHIST_YEAR_VALUE);
-        } else {
-            publishedDateConvertToGregorian = publishedDate;
-        }
 
-        if (calendarType.isBlank()) {
-            String fieldName = "calendarType";
-            String errorMessage = "calendarType is blank! calendarType required value "
-                    + Constants.GREGORIAN_CALENDAR_TYPE +
-                    " or "
-                    + Constants.BUDDHIST_CALENDAR_TYPE;
-            error.put(fieldName, errorMessage);
-        } else if (!calendarType.equals(Constants.GREGORIAN_CALENDAR_TYPE) && !calendarType.equals(Constants.BUDDHIST_CALENDAR_TYPE)) {
-            String fieldName = "calendarType";
-            String errorMessage = "calendarType required value "
-                    + Constants.GREGORIAN_CALENDAR_TYPE +
-                    " or "
-                    + Constants.BUDDHIST_CALENDAR_TYPE;
-            error.put(fieldName, errorMessage);
-        }
-
-        if (calendarType.equals(Constants.BUDDHIST_CALENDAR_TYPE) && publishedDate.getYear() <= (Constants.BUDDHIST_YEAR_VALUE + Constants.GREGORIAN_AFTER_VALUE)) {
+        if (publishedDate.getYear() <= Constants.THAI_BUDDHIST_DATE_AFTER_VALUE) {
             String fieldName = "publishedDate";
-            String errorMessage = "publishedYear " + Constants.BUDDHIST_CALENDAR_TYPE
-                    + " need more than "
-                    + (Constants.BUDDHIST_YEAR_VALUE + Constants.GREGORIAN_AFTER_VALUE)
+            String errorMessage = "publishedYear need more than "
+                    + Constants.THAI_BUDDHIST_DATE_AFTER_VALUE
                     + " year";
             error.put(fieldName, errorMessage);
-        } else if (publishedDate.getYear() <= Constants.GREGORIAN_AFTER_VALUE) {
-            String fieldName = "publishedDate";
-            String errorMessage = "publishedYear " + Constants.GREGORIAN_CALENDAR_TYPE
-                    + " need more than "
-                    + Constants.GREGORIAN_AFTER_VALUE
-                    + " year";
-            error.put(fieldName, errorMessage);
-        } else if (publishedDateConvertToGregorian.isAfter(LocalDate.now())) {
+        } else if (dateConvert.dateConvertThaiBuddhistDateToGregorianDate(publishedDate).isAfter(LocalDate.now())) {
             String fieldName = "publishedDate";
             String errorMessage = "publishedYear after currentDate";
             error.put(fieldName, errorMessage);

@@ -3,9 +3,9 @@ package com.manage.books.controller;
 import com.manage.books.entity.Books;
 import com.manage.books.models.BooksRequest;
 import com.manage.books.service.BooksService;
+import com.manage.books.utils.DateConvert;
 import com.manage.books.validate.PublishedYearValidator;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -20,18 +20,19 @@ import java.util.Map;
 @RequestMapping("/books")
 public class BooksController {
 
-    @Autowired
-    private BooksService booksService;
-    @Autowired
-    private PublishedYearValidator publishedYearValidator;
+    private final BooksService booksService;
+    private final PublishedYearValidator publishedYearValidator;
+
+    public BooksController(BooksService booksService, PublishedYearValidator publishedYearValidator, DateConvert dateConvert) {
+        this.booksService = booksService;
+        this.publishedYearValidator = publishedYearValidator;
+    }
 
     @PostMapping
     public ResponseEntity<?> createBook(@Valid @RequestBody BooksRequest booksRequest) {
         ResponseEntity<?> response;
         if (booksRequest.getPublishedDate() != null) {
-            response = publishedYearValidator.validatePublishedYear(
-                    booksRequest.getPublishedDate(),
-                    booksRequest.getCalendarType());
+            response = publishedYearValidator.validatePublishedYear(booksRequest.getPublishedDate());
             if (response == null) {
                 response = this.booksService.createBooksService(booksRequest);
             }

@@ -10,7 +10,6 @@ public class BooksRequest {
     @NotBlank(message = "Author is required")
     private String author;
     private LocalDate publishedDate;
-    private String calendarType;
 
     public String getTitle() {
         return title;
@@ -36,11 +35,4 @@ public class BooksRequest {
         this.publishedDate = publishedDate;
     }
 
-    public String getCalendarType() {
-        return calendarType;
-    }
-
-    public void setCalendarType(String calendarType) {
-        this.calendarType = calendarType;
-    }
 }

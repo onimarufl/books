@@ -31,7 +31,6 @@ public class BookRequestValidateTest {
         booksRequest.setTitle("TestTitle");
         booksRequest.setAuthor("TestAuthor");
         booksRequest.setPublishedDate(date);
-        booksRequest.setCalendarType("GREGORIAN");
 
         Set<ConstraintViolation<BooksRequest>> violations = validator.validate(booksRequest);
         assertTrue(violations.isEmpty(), "Valid user should have no violations.");
@@ -44,7 +43,6 @@ public class BookRequestValidateTest {
         booksRequest.setTitle("");
         booksRequest.setAuthor("TestAuthor");
         booksRequest.setPublishedDate(date);
-        booksRequest.setCalendarType("GREGORIAN");
 
         Set<ConstraintViolation<BooksRequest>> violations = validator.validate(booksRequest);
         assertFalse(violations.isEmpty(), "Title is required");
@@ -57,7 +55,6 @@ public class BookRequestValidateTest {
         booksRequest.setTitle("TestTitle");
         booksRequest.setAuthor("");
         booksRequest.setPublishedDate(date);
-        booksRequest.setCalendarType("GREGORIAN");
 
         Set<ConstraintViolation<BooksRequest>> violations = validator.validate(booksRequest);
         assertFalse(violations.isEmpty(), "Author is required");
