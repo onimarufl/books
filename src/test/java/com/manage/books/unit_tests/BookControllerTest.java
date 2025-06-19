@@ -36,7 +36,6 @@ public class BookControllerTest {
         booksRequest.setTitle("TestTitle");
         booksRequest.setAuthor("TestAuthor");
         booksRequest.setPublishedDate(date);
-        booksRequest.setCalendarType("GREGORIAN");
 
         Books books = new Books();
         books.setTitle("TestTitle");
@@ -44,10 +43,9 @@ public class BookControllerTest {
         books.setPublishedDate(date);
 
         when(publishedYearValidator.validatePublishedYear(
-                booksRequest.getPublishedDate(),
-                booksRequest.getCalendarType()
+                booksRequest.getPublishedDate()
         )).thenReturn(null);
-        when(booksService.createBooksService(booksRequest)).thenReturn(new ResponseEntity<Books>(books, HttpStatus.CREATED));
+        when(booksService.createBooksService(booksRequest)).thenReturn(new ResponseEntity<>(books, HttpStatus.CREATED));
         ResponseEntity<?> actual = booksController.createBook(booksRequest);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());

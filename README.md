@@ -1,89 +1,106 @@
-# books
-Manage Books Service
+# Manage Books Service
 
-Required
+## System Require
+
 - Java Version 17
 - MySQL Version 8.0.42
+- Docker
 
-Database Schema
-- CREATE TABLE books (
-  id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  title varchar(255) NOT NULL,
-  author varchar(255),
-  INDEX (author),
-  published_date date);
+## Database Schema
 
-API Specification
+```sql
+CREATE TABLE sys.books (
+    id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    title varchar(255) NOT NULL,
+    author varchar(255),
+    INDEX (author),
+    published_date date);
+```
 
-URL : POST {Host}/books
-  - title String Mandatory (ชื่อหนังสือ)
-  - author String Mandatory (ชื่อผู้เขียน)
-  - published_date Optional (วันที่เผยแพร่)
-  - calendarType String Condition
-    Mandatory = ถ้า published_date ไม่เป็นค่าว่าง / Optional = ถ้า published_date เป็นค่าว่าง และสามารถใช้ได้เพียง GREGORIAN และ BUDDHIST_YEAR
+## API Specification
 
-URL : GET {Host}/books?author={authorName}
-- authorName String Optional (ชื่อผู้เขียน)
+#### Endpoint: POST {Host}/books
+#### Request Body:
 
-Integration Test Detail
-- API CreateBook เริ่มทำการทดสอบโดยการ Call Function createBook ที่อยู่ใน BooksController เพื่อเรียกไปยัง Function createBooksService ที่อยู่ใน BookService จากนั้น Function createBooksService จะทำการ Call ไปที่ BookRepository ที่เชื่อต่อกับ Database เพื่อบันทึกข้อมูลลง Database
+```json
+{
+  "title": "string (Mandatory)",
+  "author": "string (Mandatory)",
+  "publishedDate": "date (Optional)" //format : yyyy-MM-dd & require : ThaiBuddhistDate
+}
+```
 
+#### Endpoint: GET {Host}/books?author={authorName}
+#### Request Param:
 
-- API GetBookByAuthor เริ่มทำการทดสอบโดยการ Call Function createBooksService ที่อยู่ใน BookService เพื่อเตรียมข้อมูลสำหรับทำการทดสอบ จากนั้นทำการ Call Function getBookByAuthor ที่อยู่ใน BooksController เพื่อเรียกไปยัง Function getByAuthorService ที่อยู่ใน BookService จากนั้น Function getByAuthorService จะทำการ Call ไปที่ BookRepository ที่เชื่อต่อกับ Database เพื่อดึงข้อมูลที่เตรียมไว้
+``` 
+authorName String Optional
+```
 
+## Integration Test Detail
+#### API CreateBook
+``` text
+- เริ่มทำการทดสอบโดยการ Call Function createBook ที่อยู่ใน BooksController เพื่อเรียกไปยัง Function createBooksService ที่อยู่ใน BookService จากนั้น Function createBooksService จะทำการ Call ไปที่ BookRepository ที่เชื่อต่อกับ Database เพื่อบันทึกข้อมูลลง Database
+```
+#### API GetBookByAuthor
+```
+เริ่มทำการทดสอบโดยการ Call Function getBookByAuthor ที่อยู่ใน BooksController เพื่อเรียกไปยัง Function getByAuthorService ที่อยู่ใน BookService จากนั้น Function getByAuthorService จะทำการ Call ไปที่ BookRepository ที่เชื่อต่อกับ Database เพื่อดึงข้อมูล
+```
 
-Example API
+## Example API
 
-POST API
-
-    POST Ex. curl --location 'localhost:8080/books' \
+### Endpoint: POST {Host}/books
+```curl
+curl --location 'localhost:8080/books' \
     --header 'Content-Type: application/json' \
     --data '{
     "title":"TestTitle",
     "author":"TestAuthor",
-    "publishedDate":"2025-02-20",
-    "calendarType":"GREGORIAN"
+    "publishedDate":"2568-02-20"
     }'
+```
+#### Ex. Request Body
+```json
+{
+  "title":"TestTitle",
+  "author":"TestAuthor",
+  "publishedDate":"2568-02-20"
+}
+```
+#### Ex. Response Body
+```json
+{
+  "id": 15,
+  "title": "TestTitle",
+  "author": "TestAuthor",
+  "publishedDate": "2025-02-20"
+}
+```
 
-    - POST Ex. Json Request Body
-      {
-      "title":"TestTitle",
-      "author":"TestAuthor",
-      "publishedDate":"2025-02-20",
-      "calendarType":"GREGORIAN"
-      }
-
-    - POST Ex. Json Response Body
-    {
+### Endpoint: GET {Host}/books?author={authorName}
+```curl
+curl --location 'localhost:8080/books?author=TestAuthor'
+```
+#### Ex. Response Body
+```json
+[
+  {
     "id": 15,
-    "title": "TestTitle",
+    "title": "TestTitle1",
     "author": "TestAuthor",
-    "publishedDate": "2025-02-20"
-    }
-        
-
-GET API
-
-    - GET Ex. curl --location 'localhost:8080/books?author=TestAuthor'
-
-    - GET Ex. Response 
-    [
-      {
-      "id": 15,
-      "title": "TestTitle1",
-      "author": "TestAuthor",
-      "publishedDate": "2000-02-20"
-      },
-      {
-      "id": 16,
-      "title": "TestTitle2",
-      "author": "TestAuthor",
-      "publishedDate": "2025-06-16"
-      },
-      {
-      "id": 17,
-      "title": "TestTitle3",
-      "author": "TestAuthor",
-      "publishedDate": "2025-06-16"
-      }
-    ]
+    "publishedDate": "2000-02-20"
+  },
+  {
+    "id": 16,
+    "title": "TestTitle2",
+    "author": "TestAuthor",
+    "publishedDate": "2025-06-16"
+  },
+  {
+    "id": 17,
+    "title": "TestTitle3",
+    "author": "TestAuthor",
+    "publishedDate": "2025-06-16"
+  }
+]
+```
