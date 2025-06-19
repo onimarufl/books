@@ -3,7 +3,6 @@ package com.manage.books.controller;
 import com.manage.books.entity.Books;
 import com.manage.books.models.BooksRequest;
 import com.manage.books.service.BooksService;
-import com.manage.books.utils.DateConvert;
 import com.manage.books.validate.PublishedYearValidator;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,7 @@ public class BooksController {
     private final BooksService booksService;
     private final PublishedYearValidator publishedYearValidator;
 
-    public BooksController(BooksService booksService, PublishedYearValidator publishedYearValidator, DateConvert dateConvert) {
+    public BooksController(BooksService booksService, PublishedYearValidator publishedYearValidator) {
         this.booksService = booksService;
         this.publishedYearValidator = publishedYearValidator;
     }

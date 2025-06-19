@@ -3,8 +3,6 @@ package com.manage.books.integration_tests;
 import com.manage.books.controller.BooksController;
 import com.manage.books.entity.Books;
 import com.manage.books.models.BooksRequest;
-import com.manage.books.repository.BooksRepository;
-import com.manage.books.service.BooksService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +30,6 @@ public class BookIntegrationTest {
 
     @Autowired
     private BooksController booksController;
-
-    @Autowired
-    private BooksService booksService;
 
     @Container
     public static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.0.42")

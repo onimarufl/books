@@ -45,7 +45,7 @@ public class BookControllerTest {
         when(publishedYearValidator.validatePublishedYear(
                 booksRequest.getPublishedDate()
         )).thenReturn(null);
-        when(booksService.createBooksService(booksRequest)).thenReturn(new ResponseEntity<Books>(books, HttpStatus.CREATED));
+        when(booksService.createBooksService(booksRequest)).thenReturn(new ResponseEntity<>(books, HttpStatus.CREATED));
         ResponseEntity<?> actual = booksController.createBook(booksRequest);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
